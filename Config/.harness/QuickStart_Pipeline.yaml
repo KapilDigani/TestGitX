@@ -1,0 +1,67 @@
+pipeline:
+    name: QuickStart Pipeline
+    identifier: QuickStart_Pipeline
+    allowStageExecutions: false
+    projectIdentifier: KD_CD_GitX
+    orgIdentifier: KD
+    tags: {}
+    stages:
+        - stage:
+              name: Deploy
+              identifier: Deploy
+              description: ""
+              type: Deployment
+              spec:
+                  serviceConfig:
+                      serviceRef: nginx
+                      serviceDefinition:
+                          type: Kubernetes
+                          spec:
+                              variables: []
+                              manifests:
+                                  - manifest:
+                                        identifier: nginx
+                                        type: K8sManifest
+                                        spec:
+                                            store:
+                                                type: Github
+                                                spec:
+                                                    connectorRef: Github
+                                                    gitFetchType: Branch
+                                                    paths:
+                                                        - content/en/examples/application/nginx-app.yaml
+                                                    repoName: https://github.com/kubernetes/website
+                                                    branch: main
+                                            skipResourceVersioning: false
+                  infrastructure:
+                      environmentRef: QuickStart
+                      infrastructureDefinition:
+                          type: KubernetesDirect
+                          spec:
+                              connectorRef: QuickStart_K8S
+                              namespace: default
+                              releaseName: release-<+INFRA_KEY>
+                      allowSimultaneousDeployments: false
+                  execution:
+                      steps:
+                          - step:
+                                name: Rollout Deployment
+                                identifier: rolloutDeployment
+                                type: K8sRollingDeploy
+                                timeout: 10m
+                                spec:
+                                    skipDryRun: false
+                      rollbackSteps:
+                          - step:
+                                name: Rollback Rollout Deployment
+                                identifier: rollbackRolloutDeployment
+                                type: K8sRollingRollback
+                                timeout: 10m
+                                spec: {}
+              tags: {}
+              failureStrategies:
+                  - onFailure:
+                        errors:
+                            - AllErrors
+                        action:
+                            type: StageRollback
