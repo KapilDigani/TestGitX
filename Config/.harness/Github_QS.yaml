@@ -1,0 +1,18 @@
+connector:
+  name: Github QS
+  identifier: Github_QS
+  description:
+  orgIdentifier: KD
+  projectIdentifier: KD_CD_GitX
+  type: Github
+  spec:
+    url: https://github.com/kubernetes/website
+    authentication:
+      type: Http
+      spec:
+        type: UsernameToken
+        spec:
+          username: KapilDigani
+          tokenRef: account.KD_GitHub_Pwd
+    executeOnDelegate: false
+    type: Repo
