@@ -1,0 +1,12 @@
+connector:
+  name: QuickStart K8S
+  identifier: QuickStart_K8S
+  description:
+  orgIdentifier: KD
+  projectIdentifier: KD_CD_GitX
+  type: K8sCluster
+  spec:
+    credential:
+      type: InheritFromDelegate
+    delegateSelectors:
+    - kd1-gcp
