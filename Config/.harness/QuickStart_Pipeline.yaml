@@ -26,11 +26,10 @@ pipeline:
                                             store:
                                                 type: Github
                                                 spec:
-                                                    connectorRef: Github
+                                                    connectorRef: Github_QS
                                                     gitFetchType: Branch
                                                     paths:
                                                         - content/en/examples/application/nginx-app.yaml
-                                                    repoName: https://github.com/kubernetes/website
                                                     branch: main
                                             skipResourceVersioning: false
                   infrastructure:
